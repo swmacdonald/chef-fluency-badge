@@ -5,7 +5,7 @@
 # Copyright:: 2017, The Authors, All Rights Reserved.
 #
 
-%w(tomcat8 tomcat8-webapps tomcat8-docs-webapp tomcat8-admin-webapps).each do |pkg|
+%w(tomcat tomcat-webapps tomcat-docs-webapp tomcat-admin-webapps).each do |pkg|
 	package pkg do
 	action :install
 	end
@@ -29,8 +29,15 @@ package 'tomcat-admin-webapps' do
 end
 =end
 
-service 'tomcat8' do
+service 'tomcat' do
 	action [:enable, :start]
+end
+
+directory '/tmp/unanet' do
+	owner 'tomcat'
+	group 'tomcat'
+	mode '0755'
+	action :create
 end
 
 directory '/tmp/unanet/temp' do
@@ -40,16 +47,13 @@ directory '/tmp/unanet/temp' do
 	action :create
 end
 
-ruby_block "insert_line" do
+regex = "JAVA_OPTS='${JAVA_OPTS} -Xms128m -Xmx512m -Djava.awt.headless=true' "
+with = "JAVA_OPTS='${JAVA_OPTS} -Xms128m -Xmx512m -Djava.awt.headless=true' "
+ruby_block 'insert_line' do
 	block do
-		file = Chef::Util::FileEdit.new("/etc/tomcat8/tomcat8.conf")
-		file.insert_line_if_no_match("JAVA_OPTS='${JAVA_OPTS} -Xms128m -Xmx512m -Djava.awt.headless=true' ")
+		file = Chef::Util::FileEdit.new("/etc/tomcat/tomcat.conf")
+		file.insert_line_if_no_match(regex, with)
 		file.write_file
 	end
 end
-
-
-
-
-
 
