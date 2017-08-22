@@ -47,7 +47,8 @@ directory '/tmp/unanet/temp' do
 	action :create
 end
 
-regex = "JAVA_OPTS='${JAVA_OPTS} -Xms128m -Xmx512m -Djava.awt.headless=true' "
+#regex = "JAVA_OPTS='${JAVA_OPTS} -Xms128m -Xmx512m -Djava.awt.headless=true' "
+regex = "%r{JAVA_OPTS='\$\{JAVA_OPTS\}\s-Xms128m\s-Xmx512m\s-Djava.awt.headless=true'}"
 with = "JAVA_OPTS='${JAVA_OPTS} -Xms128m -Xmx512m -Djava.awt.headless=true' "
 ruby_block 'insert_line' do
 	block do

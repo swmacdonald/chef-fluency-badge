@@ -7,23 +7,17 @@
 
 unless os.windows?
   # This is an example test, replace with your own test.
-  describe user('root'), :skip do
+  describe user('tomcat') do
     it { should exist }
   end
 end
 
-# This is an example test, replace it with your own test.
-describe port(80), :skip do
-  it { should_not be_listening }
-end
-
-
 # tomcat 8 inspect tests
-describe package('tomcat8') do
+describe package('tomcat') do
 	it { should be_installed }
 end
 
-describe service('tomcat8') do
+describe service('tomcat') do
 	it { should be_running }
 end
 
@@ -31,9 +25,9 @@ describe port(8080) do
 	it { should be_listening }
 end
 
-describe file('/etc/tomcat8/tomcat8.conf') do
+describe file('/etc/tomcat/tomcat.conf') do
 	it { should exist }
-	its(:content) { should match "JAVA_OPTS='${JAVA_OPTS} -Xms128m -Xmx512m -Djava.awt.headless=true' "  }
+	its(:content) { should match (%r{JAVA_OPTS='\$\{JAVA_OPTS\}\s-Xms128m\s-Xmx512m\s-Djava.awt.headless=true'})  }
 end
 
 
