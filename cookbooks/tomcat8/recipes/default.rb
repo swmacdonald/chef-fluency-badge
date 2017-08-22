@@ -46,7 +46,7 @@ directory '/tmp/unanet/temp' do
 	mode '0755'
 	action :create
 end
-
+=begin
 #regex = "JAVA_OPTS='${JAVA_OPTS} -Xms128m -Xmx512m -Djava.awt.headless=true' "
 regex = "%r{JAVA_OPTS='\$\{JAVA_OPTS\}\s-Xms128m\s-Xmx512m\s-Djava.awt.headless=true'}"
 with = "JAVA_OPTS='${JAVA_OPTS} -Xms128m -Xmx512m -Djava.awt.headless=true' "
@@ -57,4 +57,14 @@ ruby_block 'insert_line' do
 		file.write_file
 	end
 end
+=end
+#set tomcat conf file settings once...
+execute "tomcat_java_conf_settings" do
+	command 'echo "JAVA_OPTS=\'${JAVA_OPTS} -Xms128m -Xmx512m -Djava.awt.headless=true\' " | sudo tee -a /etc/tomcat/tomcat.conf && touch /tmp/unanet/tomcat_java_conf.txt' 
+	creates "/tmp/unanet/tomcat_java_conf.txt"
+	action :run
+end
+
+
+
 
